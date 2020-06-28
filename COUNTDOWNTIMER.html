@@ -1,0 +1,174 @@
+<html>
+    <head>
+        <title>Countdown Clock</title>
+        <style>
+            body {
+                background-image: linear-gradient(to right bottom, #f3b9a5, #e8a3c0);
+                font-family: Arial, Helvetica, sans-serif;
+            }
+            #timer {
+                position: absolute;
+                left: 50%;
+                top: 40%;
+                transform: translate(-50%, -40%);
+            }
+            input, button {
+                padding: 10px;
+                margin: 5px;
+                border-radius: 10px;
+                border: none;
+            }
+            button {
+                background: #272838;
+                color: #F9F8F8;
+                cursor: pointer;
+            }
+            .flip {
+                display: inline-block;
+                padding: 10px;
+            }
+            .title {
+                color: #272838;
+                text-transform: uppercase;
+                text-align: center;
+                font-size: 15px;
+            }
+            .number {
+                background: #272838;
+                color: #F9F8F8;
+                text-align: center;
+                width: 90px;
+                height: 70px;
+                padding-top: 10px;
+                font-size: 50px;
+                border-radius: 5px;
+            }
+            #expiremessage {
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: 40px;
+                font-weight: bolder;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="timer">
+            <h1>Countdown Timer</h1>
+            <h2>Enter end date and time </h2>
+            <div style="font-family: monospace;">
+                Date: <input type="date" id="dateinput"><br>
+                Time: <input type="time" id="timeinput"><br>
+            </div>
+ 
+            <button onclick="startTimer()">Start timer</button>
+    
+            <br><br>
+            
+            <div id="expiremessage">
+ 
+            </div>
+            <div class="flip">
+                <div class="title">
+                    Days
+                </div>
+                <div class="number" id="days">
+                    
+                </div>
+            </div>
+            <div class="flip">
+                <div class="title">
+                    Hours
+                </div>
+                <div class="number" id="hours">
+                    
+                </div>
+            </div>
+            <div class="flip">
+                <div class="title">
+                    Minutes
+                </div>
+                <div class="number" id="minutes">
+                    
+                </div>
+            </div>
+            <div class="flip">
+                <div class="title">
+                    Seconds
+                </div>
+                <div class="number" id="seconds">
+                    
+                </div>
+            </div>
+            <br>
+        </div>
+ 
+        <script>
+            // declare variables
+            var endtime, days, hours, minutes, seconds;
+            function startTimer() {
+                // get input field values
+                var datevalue = document.getElementById("dateinput").value;
+                var timevalue = document.getElementById("timeinput").value;
+ 
+                // make sure the values are not empty
+                if (datevalue === "" || timevalue === "") {
+                    console.log(datevalue + " " + timevalue);
+                    alert("Please fill both the fields");
+                    return;
+                }
+ 
+                // construct the date string
+                var datestring = datevalue + " " + timevalue;
+ 
+                // create new Date object and get its time in milliseconds
+                endtime = new Date(datestring).getTime();
+ 
+                // call calculate after every 100 milliseconds
+                setInterval(calculate, 100);
+            }
+ 
+            function calculate() {
+                // calculate time difference in milliseconds
+                var difference = endtime - Date.now();
+ 
+                // if difference is less than 0, then the timer has expired
+                if (difference < 0) {
+                    document.getElementById("expiremessage").innerHTML = "EXPIRED<br>";
+                    document.getElementById("days").innerHTML = "";
+                    document.getElementById("hours").innerHTML = "";
+                    document.getElementById("minutes").innerHTML = "";
+                    document.getElementById("seconds").innerHTML = "";
+                    return;
+                }
+ 
+                // Calculate number of days, hours, minutes and seconds
+                // one day = 24 * 60 * 60 * 1000 milliseconds
+                var millis = 24 * 60 * 60 * 1000;
+                days = Math.floor(difference / millis);
+                difference %= millis;
+ 
+                // one hour = 60 * 60 * 1000 milliseconds
+                millis = 60 * 60 * 1000;
+                hours = Math.floor(difference / millis);
+                difference %= millis;
+ 
+                // one minute = 60 * 1000 milliseconds
+                millis = 60 * 1000;
+                minutes = Math.floor(difference / millis);
+                difference %= millis;
+ 
+                // one second = 1000 milliseconds
+                seconds = Math.floor(difference / 1000);
+ 
+                // update the innerHTML
+                updateHTML();
+            }
+ 
+            function updateHTML() {
+                document.getElementById("days").innerHTML = days;
+                document.getElementById("hours").innerHTML = hours;
+                document.getElementById("minutes").innerHTML = minutes;
+                document.getElementById("seconds").innerHTML = seconds;
+            }
+        </script>
+    </body>
+</html>
